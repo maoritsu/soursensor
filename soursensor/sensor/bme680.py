@@ -21,35 +21,14 @@ class BME680():
 
       # Disable gas measurements
       self.sensor.set_gas_status(bme680.DISABLE_GAS_MEAS)
-      
-      # CPU temperature compensation
-      self.smoothing_factor = 1.0  # Smaller numbers adjust temp down, vice versa
-      self.smooth_size = 10  # Dampens jitter due to rapid CPU temp changes
-      self.cpu_temps = [] # Store rolling series of CPU temps
 
     def get_data(self):
 
       self.sensor.get_sensor_data()
 
-      cpu_temp = self._get_cpu_temperature()
-      self.cpu_temps.append(cpu_temp)
-
-      if len(self.cpu_temps) > self.smooth_size:
-        self.cpu_temps = self.cpu_temps[1:]
-
-      smoothed_cpu_temp = sum(self.cpu_temps) / float(len(self.cpu_temps))
-      raw_temp = self.sensor.data.temperature
-      comp_temp = raw_temp - ((smoothed_cpu_temp - raw_temp) / self.smoothing_factor)
-
       return {
-        "raw_temperature": raw_temp,
-        "compensated_temperature": comp_temp,
+        "temperature": self.sensor.data.temperature,
         "pressure": self.sensor.data.pressure,
         "humidity": self.sensor.data.gas_resistance,
       }
-
-    def _get_cpu_temperature(self):
-      process = Popen(['cat', '/sys/class/thermal/thermal_zone0/temp'], stdout=PIPE)
-      output, _error = process.communicate()
-      return float(output) / 1000
 

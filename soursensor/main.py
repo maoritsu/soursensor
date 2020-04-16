@@ -11,6 +11,6 @@ while True:
   for sensor in sensors:
     data = sensor.get_data()
     for measurement, value in data.items():
-      #db.write(measurement, value)
+      db.write(measurement, value)
       print('Measurement inserted into db: ' + str(measurement) + ', ' + str(value))
-  time.sleep(5)
+  time.sleep(60)
