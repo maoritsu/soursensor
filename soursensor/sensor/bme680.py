@@ -1,11 +1,10 @@
 from subprocess import PIPE, Popen
-import bme680
-import time
-
+import bme680, logging, time
 
 class BME680():
 
     def __init__(self):
+      self.name = 'BME680'
       try:
           self.sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
       except IOError:
@@ -23,12 +22,13 @@ class BME680():
       self.sensor.set_gas_status(bme680.DISABLE_GAS_MEAS)
 
     def get_data(self):
-
       self.sensor.get_sensor_data()
 
       return {
         "temperature": self.sensor.data.temperature,
         "pressure": self.sensor.data.pressure,
-        "humidity": self.sensor.data.gas_resistance,
+        "humidity": self.sensor.data.humidity,
       }
-
+    
+    def stop(self):
+      pass
