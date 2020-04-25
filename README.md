@@ -49,4 +49,9 @@ Add the soursensor configuration file `config.yaml` in `/home/user/.config/sours
 
 ## Running
 
-Start soursensor by running `python soursensor/main.py`.
+Start soursensor after activating the virtual environment:
+
+```
+source .venv/bin/activate
+python soursensor/main.py
+ ```
