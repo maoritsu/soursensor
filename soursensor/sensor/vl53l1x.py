@@ -32,8 +32,8 @@ class VL53L1XS():
     self.sensor.stop_ranging()
 
     return {
-      "distance_objective": distance,
-      "distance_relative": 1 - distance / self.distance_scaling_factor
+      "distance_objective": round(distance, 2),
+      "distance_relative": round(1 - distance / self.distance_scaling_factor, 2)
     }
 
   def stop(self):
