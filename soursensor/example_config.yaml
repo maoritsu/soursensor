@@ -1,0 +1,13 @@
+databases:
+  influxdb:
+    bucket: my_org
+    org: my_org
+    token: 'my_token'
+    url: 'https://my_url.com'
+sensors:
+  VL53L1X:
+    i2c_bus: 1
+    i2c_address: 0x29
+    distance_mode: 1
+    oversample_factor: 10
+    distance_scaling_factor: 230
