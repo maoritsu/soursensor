@@ -16,6 +16,12 @@ else:
 
 config = confuse.LazyConfig('soursensor')
 
+# Sourdough starter initial conditions for measuring rise
+h0 = config['starter']['height_t0'].get(float)
+d0 = 0.
+d0_init = False
+logging.info('Starter initial height: ' + str(h0) + ' mm')
+
 db = DB(config['databases']['influxdb'])
 
 sensors = []
@@ -34,6 +40,13 @@ signal.signal(signal.SIGINT, exit_handler)
 while True:
   for sensor in sensors:
     data = sensor.get_data()
+    if 'distance' in data:
+          if not d0_init:
+            logging.info('Initialising starter-sensor distance to ' + str(data['distance']) + 'mm')
+            d0 = data['distance']
+            d0_init = True
+          rise = 100.*(d0-data['distance'])/h0
+          data['rise'] = round(rise, 2)
     for measurement, value in data.items():
       logging.info('Measurement: ' + str(measurement) + ', ' + str(value))
       if not args.dryrun:

@@ -1,3 +1,5 @@
+starter:
+  height_t0: 35
 databases:
   influxdb:
     bucket: my_org

@@ -16,10 +16,13 @@ class VL53L1XS():
     self.distance_mode = config['distance_mode'].get(int)
     self.sensor.set_distance_mode(self.distance_mode)
     self.oversample_factor = config['oversample_factor'].get(int)
-    self.distance_scaling_factor = config['distance_scaling_factor'].get(float)
 
   def get_data(self):
     self.sensor.start_ranging(0)
+
+    # Dummy reading to help sensor stabilise
+    self.sensor.get_distance()
+    time.sleep(0.1)
 
     distance = 0.
     for i in range(self.oversample_factor):
@@ -32,8 +35,7 @@ class VL53L1XS():
     self.sensor.stop_ranging()
 
     return {
-      "distance_objective": round(distance, 2),
-      "distance_relative": round(1 - distance / self.distance_scaling_factor, 2)
+      "distance": round(distance, 2),
     }
 
   def stop(self):
