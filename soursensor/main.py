@@ -51,6 +51,9 @@ while True:
       logging.info('Measurement: ' + str(measurement) + ', ' + str(value))
       if not args.dryrun:
         logging.info('Writing measurement to database...')
-        db.write(measurement, value)
-        logging.info('Write complete')
+        try:
+          db.write(measurement, value)
+          logging.info('Write complete')
+        except:
+          logging.info('Failed to write to database')
   time.sleep(60)
