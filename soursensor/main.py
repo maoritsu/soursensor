@@ -55,5 +55,5 @@ while True:
           db.write(measurement, value)
           logging.info('Write complete')
         except:
-          logging.info('Failed to write to database')
+          logging.error('Failed to write to database')
   time.sleep(60)
